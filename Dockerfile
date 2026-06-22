@@ -1,30 +1,18 @@
-# Use the official Node.js image.
-FROM node:20
+FROM oven/bun:1
 
-# Create and change to the app directory.
 WORKDIR /usr/src/app
 
-# Copy the package.json and yarn.lock files.
-COPY package*.json ./
-COPY yarn.lock ./
+# Copy dependency files
+COPY package.json bun.lockb ./
 
-# Install the dependencies.
-RUN yarn install
+# Install dependencies
+RUN bun install --frozen-lockfile
 
-# Copy the rest of the application files.
+# Copy the rest of the application files
 COPY . .
 
+# Deploy Discord slash commands at build time
+RUN bun src/utils/deploy.ts
 
-ARG MONGO_URI
-
-ENV MONGO_URI=${MONGO_URI}
-
-# Build the application.
-RUN yarn build
-RUN yarn deploy
-
-# Use the dist directory for the application
-WORKDIR /usr/src/app
-
-# Command to run the application.
-CMD [ "yarn", "start" ]
+# Start the application
+CMD [ "bun", "run", "start:prod" ]
