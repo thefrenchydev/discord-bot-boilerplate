@@ -11,8 +11,5 @@ RUN bun install --frozen-lockfile
 # Copy the rest of the application files
 COPY . .
 
-# Deploy Discord slash commands at build time
-RUN bun src/utils/deploy.ts
-
 # Start the application
 CMD [ "bun", "run", "start:prod" ]
