@@ -11,6 +11,11 @@ export default {
 
     const userDTO = new UserDTO(interaction.user.username, interaction.user.id);
 
+    if ((await UserService.getUserByDiscordId(interaction.user.id)) != null) {
+      await interaction.reply('User already exists.');
+      return;
+    }
+
     try {
       await UserService.createUser(userDTO);
       await interaction.reply(`Hello, ${interaction.user.username}! Your data has been saved.`);
