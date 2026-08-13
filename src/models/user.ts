@@ -8,7 +8,7 @@ export interface IUser extends Document {
   isAdmin?: boolean;
 }
 
-const UserSchema: Schema = new Schema({
+const UserSchema = new Schema<IUser>({
   username: { type: String, required: true },
   discordId: { type: String, required: true, unique: true },
   robloxId: { type: String, required: true, unique: true },
