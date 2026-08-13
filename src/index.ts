@@ -43,7 +43,7 @@ app.use(express.json({ limit: "20kb" }));
     const module = await import(filePath);
     module.default(app, client);
   }
-});
+})();
 
 (async () => {
   for (const file of eventFiles) {
