@@ -4,7 +4,6 @@ import path from 'path';
 import express from "express";
 import connectDB from './utils/database';
 import dotenv from 'dotenv';
-import userService from './services/userService';
 dotenv.config();
 
 const TOKEN = process.env.TOKEN;
@@ -32,89 +31,17 @@ const eventFiles = fs
   .readdirSync(path.join(__dirname, 'events'))
   .filter((file) => file.endsWith('.ts') || file.endsWith('.js'));
 
+const appFiles = fs
+  .readdirSync(path.join(__dirname, 'app'))
+  .filter((file) => file.endsWith('.ts') || file.endsWith('.js'));
+
 const app = express();
-
 app.use(express.json({ limit: "20kb" }));
-
-app.post("/webhook", async (req, res) => {
-  try {
-    const authorization = req.headers.authorization;
-
-    if (authorization !== `Bearer ${process.env.WEBHOOK_SECRET}`) {
-      return res.status(401).json({ error: "Non autorisé" });
-    }
-
-    const message = req.body.message;
-
-    if (typeof message !== "string" || !message.trim()) {
-      return res.status(400).json({ error: "Message invalide" });
-    }
-
-    const channel = await client.channels.fetch(
-      process.env.DISCORD_CHANNEL_ID ?? ""
-    );
-
-    if (!channel?.isSendable()) {
-      return res.status(500).json({ error: "Salon Discord invalide" });
-    }
-
-    const discordMessage = await channel.send({
-      content: message.slice(0, 2000),
-      allowedMentions: { parse: [] }
-    });
-
-    res.json({
-      success: true,
-      messageId: discordMessage.id
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Erreur interne" });
-  }
-});
-
-app.post("/users", async (req, res) => {
-  try {
-    const authorization = req.headers.authorization;
-    if (authorization !== `Bearer ${process.env.WEBHOOK_SECRET}`) {
-      return res.status(401).json({ error: "Non autorisé" });
-    }
-
-    const userId = req.body.userId;
-    if (typeof userId !== "string") {
-      return res.status(400).json({ error: "ID utilisateur invalide" });
-    }
-
-    const user = await userService.getUserByRobloxId(userId)
-    if (user === null) {
-      return res.status(400).json({ error: "ID utilisateur non trouvé" });
-    }
-
-    res.json(user);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Erreur interne" });
-  }
-});
-
-app.get("/users", async (req, res) => {
-  try {
-    const authorization = req.headers.authorization;
-    if (authorization !== `Bearer ${process.env.WEBHOOK_SECRET}`) {
-      return res.status(401).json({ error: "Non autorisé" });
-    }
-
-    const users = await userService.getAllUsers();
-    if (users === null) {
-      return res.status(400).json({ error: "Users were not found" });
-    }
-
-    res.json(users)
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Erreur interne" });
-  }
-});
+for (const file of appFiles) {
+  const filePath = path.join(__dirname, 'events', file);
+  const module = await import(filePath);
+  module.default(app, client);
+}
 
 (async () => {
   for (const file of eventFiles) {

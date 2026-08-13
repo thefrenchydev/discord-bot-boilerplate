@@ -8,6 +8,10 @@ export default {
     .addUserOption(option =>
       option.setName('user')
         .setDescription('The user to make an admin')
+        .setRequired(true))
+    .addNumberOption(option =>
+      option.setName('level')
+        .setDescription('The admin level')
         .setRequired(true)),
   async execute(interaction: ChatInputCommandInteraction) {
     const user = interaction.options.getUser('user');
@@ -16,10 +20,17 @@ export default {
       return;
     }
 
+    const level = interaction.options.getNumber('level');
+    if (!level) {
+      await interaction.reply('Admin level was not precised, put 0 if you want to remove admin access.');
+      return;
+    }
+
     try {
       const existingUser = await UserService.getUserByDiscordId(user.id);
       if (existingUser) {
-        existingUser.isAdmin = true;
+        existingUser.isAdmin = level > 0;
+        existingUser.adminLevel = level;
         await existingUser.save();
         await interaction.reply(`${user.username} is now an admin.`);
       } else {
