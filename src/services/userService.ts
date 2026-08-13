@@ -27,6 +27,7 @@ class UserService {
     const user = await User.findOne({ discordId: userDTO.discordId });
     if (user) {
       user.isAdmin = false;
+      user.adminLevel = 0;
       user.username = userDTO.username;
       user.discordId = userDTO.discordId;
       user.robloxId = userDTO.robloxId;

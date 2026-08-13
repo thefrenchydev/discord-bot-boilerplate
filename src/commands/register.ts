@@ -31,6 +31,7 @@ export default {
 
     try {
       await UserService.createUser(userDTO);
+      
       await interaction.reply(`Hello, ${interaction.user.username}! Your data has been saved.`);
     } catch (error) {
       console.error(error);

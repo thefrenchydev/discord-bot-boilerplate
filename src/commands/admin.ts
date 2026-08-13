@@ -32,7 +32,8 @@ export default {
         existingUser.isAdmin = level > 0;
         existingUser.adminLevel = level;
         await existingUser.save();
-        if (existingUser.isAdmin) await interaction.reply(`${user.username} is now an admin with level: ${level}.`);
+        
+        if (existingUser.isAdmin) await interaction.reply(`${user.username} is now an admin with level: ${existingUser.adminLevel}.`);
         else await interaction.reply(`${user.username} isn't an admin anymore.`)
       } else {
         await interaction.reply('User not found.');

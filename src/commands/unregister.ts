@@ -1,6 +1,5 @@
 import { SlashCommandBuilder, ChatInputCommandInteraction } from 'discord.js';
 import UserService from '../services/userService';
-import { UserDTO } from '../dto/userDto';
 
 export default {
   data: new SlashCommandBuilder()
@@ -14,6 +13,7 @@ export default {
 
     try {
       await UserService.deleteUser(interaction.user.id);
+
       await interaction.reply(`Goodbye, ${interaction.user.username}! Your data has been deleted.`);
     } catch (error) {
       console.error(error);
