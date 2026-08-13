@@ -7,6 +7,14 @@ class UserService {
     return user.save();
   }
 
+  public async getAllUsers(): Promise<IUser[] | null> {
+    return User.find();
+  }
+
+  public async deleteUser(discordId: string): Promise<IUser | null> {
+    return await User.findOneAndDelete({ discordId });
+  }
+
   public async getUserByDiscordId(discordId: string): Promise<IUser | null> {
     return User.findOne({ discordId });
   }
