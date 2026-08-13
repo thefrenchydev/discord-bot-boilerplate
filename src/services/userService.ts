@@ -21,6 +21,7 @@ class UserService {
       user.isAdmin = false;
       user.username = userDTO.username;
       user.discordId = userDTO.discordId;
+      user.robloxId = userDTO.robloxId;
       await user.save();
     }
   }

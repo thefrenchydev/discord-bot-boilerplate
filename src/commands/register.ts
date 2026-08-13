@@ -5,13 +5,27 @@ import { UserDTO } from '../dto/userDto';
 export default {
   data: new SlashCommandBuilder()
     .setName('register')
-    .setDescription('Registers a new user!'),
+    .setDescription('Registers a new user!')
+    .addStringOption(option =>
+      option.setName('robloxId')
+        .setDescription('Your roblox id')
+        .setRequired(true)),
   async execute(interaction: ChatInputCommandInteraction) {
+    const robloxId = interaction.options.getString('robloxId');
+    if (!robloxId) {
+      await interaction.reply('No roblox id was given.');
+      return;
+    }
 
-    const userDTO = new UserDTO(interaction.user.username, interaction.user.id);
+    const userDTO = new UserDTO(interaction.user.username, interaction.user.id, robloxId);
 
     if ((await UserService.getUserByDiscordId(interaction.user.id)) != null) {
       await interaction.reply('User already exists.');
+      return;
+    }
+
+    if ((await UserService.getUserByRobloxId(robloxId)) != null) {
+      await interaction.reply('A user already registered with that roblox id.');
       return;
     }
 

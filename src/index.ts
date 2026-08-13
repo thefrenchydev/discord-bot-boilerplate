@@ -73,7 +73,29 @@ app.post("/webhook", async (req, res) => {
   }
 });
 
-app.get("/webhook", async (req, res) => {
+app.post("/admin", async (req, res) => {
+  try {
+    const authorization = req.headers.authorization;
+    if (authorization !== `Bearer ${process.env.WEBHOOK_SECRET}`) {
+      return res.status(401).json({ error: "Non autorisé" });
+    }
+
+    const userId = req.body.message;
+    if (typeof userId !== "string" || !userId.trim()) {
+      return res.status(400).json({ error: "Message invalide" });
+    }
+
+    res.json({
+      success: true,
+      
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Erreur interne" });
+  }
+});
+
+app.get("/admin", async (req, res) => {
   try {
     const authorization = req.headers.authorization;
     if (authorization !== `Bearer ${process.env.WEBHOOK_SECRET}`) {
