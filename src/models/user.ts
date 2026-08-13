@@ -12,7 +12,7 @@ const UserSchema: Schema = new Schema({
   username: { type: String, required: true },
   discordId: { type: String, required: true, unique: true },
   robloxId: { type: String, required: true, unique: true },
-  adminlevel: { type: Number, required: true },
+  adminLevel: { type: Number, required: true },
   isAdmin: { type: Boolean, default: false },
 });
 
