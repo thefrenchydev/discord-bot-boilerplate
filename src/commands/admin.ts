@@ -14,6 +14,11 @@ export default {
         .setDescription('The admin level')
         .setRequired(true)),
   async execute(interaction: ChatInputCommandInteraction) {
+    if (interaction.channelId !== process.env.DISCORD_CHANNEL_ID) {
+      await interaction.reply('You\'re not allowed to run that command!');
+      return;
+    }
+
     const user = interaction.options.getUser('user');
     if (!user) {
       await interaction.reply('User not found.');
