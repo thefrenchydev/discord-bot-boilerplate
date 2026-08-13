@@ -7,11 +7,11 @@ export default {
     .setName('register')
     .setDescription('Registers a new user!')
     .addStringOption(option =>
-      option.setName('robloxId')
+      option.setName('roblox-id')
         .setDescription('Your roblox id')
         .setRequired(true)),
   async execute(interaction: ChatInputCommandInteraction) {
-    const robloxId = interaction.options.getString('robloxId');
+    const robloxId = interaction.options.getString('roblox-id');
     if (!robloxId) {
       await interaction.reply('No roblox id was given.');
       return;
