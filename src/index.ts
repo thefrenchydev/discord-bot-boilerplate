@@ -37,11 +37,13 @@ const appFiles = fs
 
 const app = express();
 app.use(express.json({ limit: "20kb" }));
-for (const file of appFiles) {
-  const filePath = path.join(__dirname, 'app', file);
-  const module = await import(filePath);
-  module.default(app, client);
-}
+(async () => {
+  for (const file of appFiles) {
+    const filePath = path.join(__dirname, 'app', file);
+    const module = await import(filePath);
+    module.default(app, client);
+  }
+});
 
 (async () => {
   for (const file of eventFiles) {
