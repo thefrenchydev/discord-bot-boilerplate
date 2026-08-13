@@ -21,7 +21,7 @@ export default {
     }
 
     const level = interaction.options.getNumber('level');
-    if (!level) {
+    if (level === null || level < 0) {
       await interaction.reply('Admin level was not precised, put 0 if you want to remove admin access.');
       return;
     }
@@ -32,7 +32,7 @@ export default {
         existingUser.isAdmin = level > 0;
         existingUser.adminLevel = level;
         await existingUser.save();
-        
+
         if (existingUser.isAdmin) await interaction.reply(`${user.username} is now an admin with level: ${existingUser.adminLevel}.`);
         else await interaction.reply(`${user.username} isn't an admin anymore.`)
       } else {
