@@ -85,8 +85,8 @@ app.post("/admin", async (req, res) => {
       return res.status(400).json({ error: "ID utilisateur invalide" });
     }
 
-    const isAdmin = userService.getUserByRobloxId(userId)
-    if (isAdmin == null) {
+    const isAdmin = await userService.getUserByRobloxId(userId)
+    if (isAdmin === null) {
       return res.status(400).json({ error: "ID utilisateur non trouvé" });
     }
 
