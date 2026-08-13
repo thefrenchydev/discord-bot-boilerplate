@@ -13,7 +13,7 @@ const UserSchema: Schema = new Schema({
   discordId: { type: String, required: true, unique: true },
   robloxId: { type: String, required: true, unique: true },
   isAdmin: { type: Boolean, default: false },
-  adminlevel: { type: Number, defaiult: 0 },
+  adminlevel: { type: Number, default: 0 },
 });
 
 export default mongoose.model<IUser>('User', UserSchema);
