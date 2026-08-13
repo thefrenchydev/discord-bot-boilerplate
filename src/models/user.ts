@@ -5,7 +5,7 @@ export interface IUser extends Document {
   discordId: string;
   robloxId: string;
   adminLevel: number;
-  isAdmin?: boolean;
+  isAdmin: boolean;
 }
 
 const UserSchema = new Schema<IUser>({
@@ -13,7 +13,7 @@ const UserSchema = new Schema<IUser>({
   discordId: { type: String, required: true, unique: true },
   robloxId: { type: String, required: true, unique: true },
   adminLevel: { type: Number, required: true },
-  isAdmin: { type: Boolean, default: false },
+  isAdmin: { type: Boolean, required: true },
 });
 
 export default mongoose.model<IUser>('User', UserSchema);
