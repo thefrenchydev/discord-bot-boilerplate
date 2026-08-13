@@ -5,6 +5,6 @@ export default {
   once: true,
   execute(client: Client) {
     console.log(`${client.user?.tag} is online!`);
-    client.user?.setActivity({ name: "Watching stuff", type: ActivityType.Watching })
+    client.user?.setActivity({ name: "Watching stuff", type: ActivityType.Streaming })
   },
 };

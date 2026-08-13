@@ -4,6 +4,7 @@ import path from 'path';
 import express from "express";
 import connectDB from './utils/database';
 import dotenv from 'dotenv';
+import userService from './services/userService';
 dotenv.config();
 
 const TOKEN = process.env.TOKEN;
@@ -65,6 +66,33 @@ app.post("/webhook", async (req, res) => {
     res.json({
       success: true,
       messageId: discordMessage.id
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Erreur interne" });
+  }
+});
+
+app.get("/webhook", async (req, res) => {
+  try {
+    const authorization = req.headers.authorization;
+    if (authorization !== `Bearer ${process.env.WEBHOOK_SECRET}`) {
+      return res.status(401).json({ error: "Non autorisé" });
+    }
+
+    const userId = req.body.userId;
+    if (typeof userId !== "string") {
+      return res.status(400).json({ error: "ID utilisateur invalide" });
+    }
+
+    const isAdmin = userService.getUserByRobloxId(userId)
+    if (isAdmin == null) {
+      return res.status(400).json({ error: "ID utilisateur non trouvé" });
+    }
+
+    res.json({
+      success: true,
+      isAdmin: isAdmin,
     });
   } catch (error) {
     console.error(error);

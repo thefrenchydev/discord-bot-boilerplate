@@ -11,6 +11,10 @@ class UserService {
     return User.findOne({ discordId });
   }
 
+  public async getUserByRobloxId(robloxId: string): Promise<IUser | null> {
+    return User.findOne({ robloxId });
+  }
+
   public async resetUser(userDTO: UserDTO): Promise<void> {
     const user = await User.findOne({ discordId: userDTO.discordId });
     if (user) {
