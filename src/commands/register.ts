@@ -1,12 +1,11 @@
 import { SlashCommandBuilder, ChatInputCommandInteraction } from 'discord.js';
-import User from '../models/user';
 import UserService from '../services/userService';
 import { UserDTO } from '../dto/userDto';
 
 export default {
   data: new SlashCommandBuilder()
-    .setName('hello')
-    .setDescription('Replies with Hello!'),
+    .setName('register')
+    .setDescription('Registers a new user!'),
   async execute(interaction: ChatInputCommandInteraction) {
 
     const userDTO = new UserDTO(interaction.user.username, interaction.user.id);
